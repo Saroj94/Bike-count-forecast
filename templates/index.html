@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bike Rental Forecasting</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f9789 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        select {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            text-align: center;
+        }
+
+        .result.success {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+
+        .result.error {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+
+        .result h3 {
+            margin-bottom: 10px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bike Rental Forecasting System</h1>
+        
+        <form id="predictionForm">
+            <div class="form-grid">
+                <!-- These field names MUST match PredictionRequest exactly -->
+                <div class="form-group">
+                    <label for="Hour">Hour (0-23)</label>
+                    <input type="number" id="Hour" name="Hour" step="1" min="0" max="23" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="Temp">Temperature (°C)</label>
+                    <input type="number" id="Temp" name="Temp" step="0.1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="Humidity">Humidity (%)</label>
+                    <input type="number" id="Humidity" name="Humidity" step="0.1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="Wind">Wind Speed</label>
+                    <input type="number" id="Wind" name="Wind" step="0.1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="Visibility">Visibility</label>
+                    <input type="number" id="Visibility" name="Visibility" step="0.1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="SolarRad">Solar Radiation</label>
+                    <input type="number" id="SolarRad" name="SolarRad" step="0.1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="Rainfall">Rainfall (mm)</label>
+                    <input type="number" id="Rainfall" name="Rainfall" step="0.1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="Snowfall">Snowfall (cm)</label>
+                    <input type="number" id="Snowfall" name="Snowfall" step="0.1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="Seasons">Season</label>
+                    <select id="Seasons" name="Seasons" required>
+                        <option value="">-- Select Season --</option>
+                        <option value="Spring">Spring</option>
+                        <option value="Summer">Summer</option>
+                        <option value="Autumn">Autumn</option>
+                        <option value="Winter">Winter</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Holiday">Holiday</label>
+                    <select id="Holiday" name="Holiday"required>
+                     <option value="">-- Select Holiday --</option>
+                        <option value="Holiday">Holiday</option>
+                        <option value="No Holiday">No Holiday</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="FuncDay">Functioning Day (0/1)</label>
+                    <select id="FuncDay" name="FuncDay"required>
+                     <option value="">-- Select FuncDay --</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Day">Day (1-31)</label>
+                    <input type="number" id="Day" name="Day" step="1" min="1" max="31" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="WeekDay">Weekday</label>
+                    <select id="WeekDay" name="WeekDay" required>
+                        <option value="">-- Select Weekday --</option>
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Friday">Friday</option>
+                        <option value="Saturday">Saturday</option>
+                        <option value="Sunday">Sunday</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Month">Month</label>
+                    <select id="Month" name="Month" required>
+                        <option value="">-- Select Month --</option>
+                        <option value="January">January</option>
+                        <option value="February">February</option>
+                        <option value="March">March</option>
+                        <option value="April">April</option>
+                        <option value="May">May</option>
+                        <option value="June">June</option>
+                        <option value="July">July</option>
+                        <option value="August">August</option>
+                        <option value="September">September</option>
+                        <option value="October">October</option>
+                        <option value="November">November</option>
+                        <option value="December">December</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Year">Year</label>
+                    <input type="number" id="Year" name="Year" required>
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn">Make Prediction</button>
+        </form>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Processing...</p>
+        </div>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        // THIS IS THE CONNECTION BETWEEN HTML AND YOUR PYTHON CODE!
+        // Make sure the URL matches where your FastAPI app is running
+        // For local testing, use localhost:8080 (or 8000 if you changed it)
+        // For deployment, use your deployed URL
+        // Dynamic port handling needed to address Cloud Run / Azure / Heroku
+        const API_URL = 'http://localhost:8080';
+
+        document.getElementById('predictionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result');
+            
+            // Show loading
+            submitBtn.disabled = true;
+            loading.style.display = 'block';
+            result.style.display = 'none';
+            
+            try {
+                // Collect form data - these names match RequestData fields!
+                const formData = new FormData(e.target);
+                const data = {};
+                
+                // Define which fields are numeric vs string
+                const numericFields = ['Hour', 'Temp', 'Humidity', 'Wind', 'Visibility', 'DewTemp', 'SolarRad', 'Rainfall', 'Snowfall', 'Day', 'Year'];
+                
+                // Convert to appropriate types
+                for (let [key, value] of formData.entries()) {
+                    if (numericFields.includes(key)) {
+                        data[key] = parseFloat(value);
+                    } else {
+                        data[key] = value;  // Keep as string for categorical fields
+                    }
+                }
+                
+                console.log('Sending data:', data);
+                
+                // THIS SENDS DATA TO YOUR FASTAPI /predict ENDPOINT!
+                const response = await fetch(`${API_URL}/predict`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)  // Sends to PredictionRequest
+                });
+                
+                const resultData = await response.json();
+                
+                if (response.ok) {
+                    // Show success
+                    result.className = 'result success';
+                    result.innerHTML = `
+                        <h3> Forecasted Rental Count</h3>
+                        <p style="font-size: 24px; font-weight: bold; margin-top: 10px;">
+                            ${resultData.Prediction.toFixed(2)}
+                        </p>
+                    `;
+                } else {
+                    throw new Error(resultData.detail || 'Prediction failed');
+                }
+                
+            } catch (error) {
+                // Show error
+                result.className = 'result error';
+                result.innerHTML = `
+                    <h3>❌ Error</h3>
+                    <p>${error.message}</p>
+                `;
+            } finally {
+                // Re-enable button
+                submitBtn.disabled = false;
+                loading.style.display = 'none';
+                result.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+# Required packages for the project
+tensorflow==2.20.0
+pandas
+fastapi
+uvicorn[standard]
+numpy
+jinja2
+python-multipart
+scikit-learn
+matplotlib
+pydantic==2.12.5
+
