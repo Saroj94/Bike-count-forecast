@@ -1,0 +1,63 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy container app to Azure Web App - bikeforecastweb
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read #This is required for actions/checkout
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to container registry
+        uses: docker/login-action@v2
+        with:
+          registry: rentalregistry-c3hddphyaebuafar.azurecr.io/
+          username: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_4CAB6BCAD9514074A1820488B61ECFB2 }}
+          password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD_9FEDD12CC52440AAAC541A124685B30D }}
+
+      - name: Build and push container image to registry
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: rentalregistry-c3hddphyaebuafar.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_4CAB6BCAD9514074A1820488B61ECFB2 }}/seoulbike:${{ github.sha }}
+          file: ./Dockerfile
+
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write #This is required for requesting the JWT
+      contents: read #This is required for actions/checkout
+
+    needs: build
+    
+    steps:
+      
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_6CA4CF6CD7CE40199E671D07A6EF290A }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FF907A304AB645DAB8B19C74E78F4150 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_06D764ADFC0A46EF9BA07CEC999EC2E3 }}
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'bikeforecastweb'
+          slot-name: 'Production'
+          images: 'rentalregistry-c3hddphyaebuafar.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_4CAB6BCAD9514074A1820488B61ECFB2 }}/seoulbike:${{ github.sha }}'
+          
