@@ -27,7 +27,7 @@ It is used to develop an app
 1. docker build -t rentalregistry-c3hddphyaebuafar.azurecr.io/<image name>:latest .
 2. docker login rentalregistry-c3hddphyaebuafar.azurecr.io
     1. Username: rentalregistry
-    2. password: Xt+LR4AC9AIc3/EoMP4Fme83xeVSXEZx8ndHa0eD4O+ACRAC3TZa
+    2. password: Xt+LR4AC9AIc3/EoMP4F
 3. docker push rentalregistry-c3hddphyaebuafar.azurecr.io/<image name>:latest
 
 
@@ -99,7 +99,7 @@ It is used to develop an app
 2. Docker loging into Azure container registry url(bikerentforecast.azurecr.io) where i am going to push my image
     1. *docker login bikerentforecast.azurecr.io*
     2. Enter username: bikerentforecast
-    3. Azure Password: EG+AN2pj8fhTNTz6D5krc/OaQcq00ieMevMyFnoffv+ACRAtAv4l
+    3. Azure Password: EG+AN2pj8fhTNTz6D5krv4l
 
 3. Docker push: after loging in azure registry requires to push that image in the Azure Container.
     1. *docker push bikerentforecast.azurecr.io/bikeapp:latest*
