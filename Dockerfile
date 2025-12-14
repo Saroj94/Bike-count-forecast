@@ -1,5 +1,5 @@
 # Use lightweight TensorFlow CPU image
-FROM tensorflow/tensorflow:2.20.0-cpu
+FROM tensorflow/tensorflow:2.20.0
 
 WORKDIR /app
 
