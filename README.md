@@ -26,7 +26,8 @@ It is used to develop an app
 ## Build image using Registry Login Server
 1. docker build -t rentalregistry-c3hddphyaebuafar.azurecr.io/<image name>:latest .
 2. docker login rentalregistry-c3hddphyaebuafar.azurecr.io
-    1. password: Xt+LR4AC9AIc3/EoMP4Fme83xeVSXEZx8ndHa0eD4O+ACRAC3TZa
+    1. Username: rentalregistry
+    2. password: Xt+LR4AC9AIc3/EoMP4Fme83xeVSXEZx8ndHa0eD4O+ACRAC3TZa
 3. docker push rentalregistry-c3hddphyaebuafar.azurecr.io/<image name>:latest
 
 

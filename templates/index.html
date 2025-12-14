@@ -282,7 +282,7 @@
         // For local testing, use localhost:8080 (or 8000 if you changed it)
         // For deployment, use your deployed URL
         // Dynamic port handling needed to address Cloud Run / Azure / Heroku
-        const API_URL = 'http://localhost:8080';
+        const API_URL = 'https://bikeforecastweb-fegxghhwbga2hghz.westeurope-01.azurewebsites.net';
 
         document.getElementById('predictionForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -302,7 +302,7 @@
                 const data = {};
                 
                 // Define which fields are numeric vs string
-                const numericFields = ['Hour', 'Temp', 'Humidity', 'Wind', 'Visibility', 'DewTemp', 'SolarRad', 'Rainfall', 'Snowfall', 'Day', 'Year'];
+                const numericFields = ['Hour', 'Temp', 'Humidity', 'Wind', 'Visibility', 'SolarRad', 'Rainfall', 'Snowfall', 'Day', 'Year'];
                 
                 // Convert to appropriate types
                 for (let [key, value] of formData.entries()) {
