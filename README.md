@@ -19,9 +19,16 @@ It is used to develop an app
     1. docker images
 3. ACR (Azure Container Registry) setup 
     1. Save the *Registry Name: lastbike*
-    2. Registry Login Server name: *lastbike-h5dueedddsduhybq.azurecr.io*
+    2. Registry Login Server name: *rentalregistry-c3hddphyaebuafar.azurecr.io*
     3. Registry Username: *lastbike*
     4. Docker image: bikerental
+
+## Build image using Registry Login Server
+1. docker build -t rentalregistry-c3hddphyaebuafar.azurecr.io/<image name>:latest .
+2. docker login rentalregistry-c3hddphyaebuafar.azurecr.io
+    1. password: Xt+LR4AC9AIc3/EoMP4Fme83xeVSXEZx8ndHa0eD4O+ACRAC3TZa
+3. docker push rentalregistry-c3hddphyaebuafar.azurecr.io/<image name>:latest
+
 
 ## After  container registries created, Web app creation
 4. Login to ACR:
