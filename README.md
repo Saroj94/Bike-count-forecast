@@ -128,15 +128,4 @@ It is used to develop an app
 ## html localhost issue fixed
 - while changing the port 8000 to 8080 throws me error although the url was working but not able to fetch the model prediction it was due to static hardcoded port on the index.html file and change <const API_URL = 'http://localhost:8000';> to <const API_URL = 'http://localhost:8080'>;
 
-## Github error
-! [rejected]        main -> main (non-fast-forward)
-error: failed to push some refs to 'https://github.com/Saroj94/Bike-Rental-forecasting.git'
-hint: Updates were rejected because the tip of your current branch is behind
-hint: its remote counterpart. If you want to integrate the remote changes,
-hint: use 'git pull' before pushing again.
-hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 
-**Solution**
-! [rejected]        main -> main (non-fast-forward)
-1. git pull origin main --rebase
-2. git push origin main
