@@ -168,17 +168,17 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="Wind">Wind Speed</label>
+                    <label for="Wind">Wind Speed (m/s)</label>
                     <input type="number" id="Wind" name="Wind" step="0.1" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="Visibility">Visibility</label>
+                    <label for="Visibility">Visibility (10m)</label>
                     <input type="number" id="Visibility" name="Visibility" step="0.1" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="SolarRad">Solar Radiation</label>
+                    <label for="SolarRad">Solar Radiation (MJ/m2)</label>
                     <input type="number" id="SolarRad" name="SolarRad" step="0.1" required>
                 </div>
 
@@ -213,7 +213,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="FuncDay">Functioning Day (0/1)</label>
+                    <label for="FuncDay">Functioning Day (Yes/No)</label>
                     <select id="FuncDay" name="FuncDay"required>
                      <option value="">-- Select FuncDay --</option>
                         <option value="Yes">Yes</option>
@@ -282,7 +282,7 @@
         // For local testing, use localhost:8080 (or 8000 if you changed it)
         // For deployment, use your deployed URL
         // Dynamic port handling needed to address Cloud Run / Azure / Heroku
-        const API_URL = 'https://bikeforecastweb-fegxghhwbga2hghz.westeurope-01.azurewebsites.net';
+        const API_URL = window.location.origin;
 
         document.getElementById('predictionForm').addEventListener('submit', async (e) => {
             e.preventDefault();

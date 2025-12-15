@@ -137,5 +137,6 @@ hint: use 'git pull' before pushing again.
 hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 
 **Solution**
-1. git pull origin main
+! [rejected]        main -> main (non-fast-forward)
+1. git pull origin main --rebase
 2. git push origin main
