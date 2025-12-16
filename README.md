@@ -40,7 +40,8 @@ While the Simple RNN is successful, it is currently a strong prototype. The next
 2. Continuous Monitoring: Implementing a system to constantly monitor the model’s real-world accuracy and trigger alerts if prediction quality begins to degrade (model drift).
 
 # 💻 Project Structure
-The repository is organized into two main parts:| File/Folder                | Description                                                                                                                        |
+The repository is organized into two main parts:
+| File/Folder                | Description                                                                                                                        |
 |---------------------------|------------------------------------------------------------------------------------------------------------------------------------|
 | Bike_Rental_EDA.ipynb     | Exploratory Data Analysis (EDA): Initial data cleaning, description, visualization (charts, plots), and data quality verification. |
 | Bike_Rental_DLmodel.ipynb | Deep Learning Modeling: Data preparation for sequential inputs, model building (RNN, LSTM, GRU), training, evaluation, and saving the final model. |
