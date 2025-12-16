@@ -49,5 +49,5 @@ The repository is organized into two main parts:
 |---------------------------|------------------------------------------------------------------------------------------------------------------------------------|
 | Bike_Rental_EDA.ipynb     | Exploratory Data Analysis (EDA): Initial data cleaning, description, visualization (charts, plots), and data quality verification. |
 | Bike_Rental_DLmodel.ipynb | Deep Learning Modeling: Data preparation for sequential inputs, model building (RNN, LSTM, GRU), training, evaluation, and saving the final model. |
-| bike-count-forecast/                  | Deployment Code: Contains the FastAPI application (`bike.py`), Dockerfile, and the saved model/preprocessor files for serving the API. |
+| bike-count-forecast/                  | Deployment Code: Contains the FastAPI application (`main.py`), Dockerfile, and the saved model/preprocessor files for serving the API. |
 | notebook/                     | Original and preprocessed dataset files (e.g., `SeoulBikeData.csv`).                                                              |
