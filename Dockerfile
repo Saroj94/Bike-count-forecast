@@ -25,4 +25,4 @@ ENV PORT=8080
 EXPOSE 8080
 
 # Correct CMD (VERY IMPORTANT)
-CMD ["sh", "-c", "python -m uvicorn bike:app --host 0.0.0.0 --port ${PORT} --workers 1 --timeout-keep-alive 120"]
+CMD ["sh", "-c", "python -m uvicorn main:app --host 0.0.0.0 --port ${PORT} --workers 1 --timeout-keep-alive 120"]
