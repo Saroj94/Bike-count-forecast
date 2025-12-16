@@ -1,131 +1,48 @@
-## Bike Rental Forecasting System
-**FastAPI**
-It is used to develop an app
+# 🚲 Seoul Bike Demand Forecast: A Deep Learning Solution
+## Project Overview
+This project delivers a robust, real-time forecasting model to predict the hourly demand for rental bikes in Seoul, South Korea. The goal is to move bike-sharing operations from reactive to proactive logistics, ensuring bikes are always where riders need them.By accurately predicting hourly demand, city operators can:
+1. **Reduce Costs**: Minimize the time and effort spent manually re-distributing bikes.
+2. **Improve Service**: Prevent stations from running out of bikes (stock-outs) or becoming completely full.
 
-**Deployment Tools**
-1. GitHub
-2. Docker
-3. Azure
+# 🛠️ Technical Solution & Model
+This is a time-series regression problem—meaning past hourly weather and usage data directly influence future demand. To capture these complex, sequential patterns, we chose a Deep Learning approach.
 
-**Deployment Steps**
-1. Build the docker image of the source code
-2. Push the docker image to container registry
-3. Launch the web app server in the Azure
-4. Pull the docker image from the container registry to web app server and run
+**The Dataset**
+The model is trained on the Seoul Bike Sharing Demand Dataset, which contains 8,760 hourly observations over one year, including variables for:
+- Temporal Factors: Hour of the day, Seasons, Holiday status.
+- Weather Conditions: Temperature, Humidity, Wind speed, Rainfall, Snowfall, and Solar Radiation.
 
-## High Level Steps for Storing the Docker image/container in Azure cloud storage called ACR
-1. Build Docker Image
-2. Verify Image in the terminal
-    1. docker images
-3. ACR (Azure Container Registry) setup 
-    1. Save the *Registry Name: lastbike*
-    2. Registry Login Server name: *rentalregistry-c3hddphyaebuafar.azurecr.io*
-    3. Registry Username: *lastbike*
-    4. Docker image: bikerental
+**Model Selection**
+I built and compared four different Recurrent Neural Network (RNN) architectures (Simple RNN, LSTM, GRU, and a CNN-LSTM hybrid).
 
-## Build image using Registry Login Server
-1. docker build -t rentalregistry-c3hddphyaebuafar.azurecr.io/<image name>:latest .
-2. docker login rentalregistry-c3hddphyaebuafar.azurecr.io
-    1. Username: rentalregistry
-    2. password: Xt+LR4AC9AIc3/EoMP4F
-3. docker push rentalregistry-c3hddphyaebuafar.azurecr.io/<image name>:latest
+The Simple RNN (Recurrent Neural Network) emerged as the best-performing model, demonstrating superior efficiency and accuracy for this specific sequence-based prediction task.
 
+**Core Performance Metrics**
+The model's performance was measured on a completely unseen test dataset:
+- MAE (Mean Absolute Error)=241.66 Bikes,"On average, the model's prediction is off by only 242 bikes."
+- R2 Score=0.6849,The model explains approximately 68.5% of the total variability in bike rental demand.
 
-## After  container registries created, Web app creation
-4. Login to ACR:
-    1. docker login <Registry Login Server name>.azurecr.io --username <registry-username>: Message -> Login Succeeded
-    2. docker login lastbike-h5dueedddsduhybq.azurecr.io --username bikerental
-5. Tag the image for ACR:
-    1. Format::>>>>> docker tag <appsvc-tutorial-custom-image> <registry-name>.azurecr.io/<appsvc-tutorial-custom-image>:latest
-    2. Implement::>>>>> docker tag bikerental lastbike-h5dueedddsduhybq.azurecr.io/bikerental:latest
-6. Push the container into ACR:
-    1. Format::>>>>>>> docker push <Registry Login Server name>.azurecr.io/<appsvc-tutorial-custom-image>:latest
-    2. Implement::>>>>>>>> docker push bikerentalforecast.azurecr.io/bike-rental-app:latest
-    3. Now your Docker image is in ACR(Azure Container Registry)
+# 🚀 Deployment & MLOps Pipeline
+| Component          | Technology                         | Role                                                                 |
+|--------------------|------------------------------------|----------------------------------------------------------------------|
+| Prediction API     | FastAPI                            | Provides a robust, high-performance endpoint for real-time predictions. |
+| Containerization   | Docker                             | Packages the model, code, and environment for consistent deployment. |
+| Image Registry     | Azure Container Registry (ACR)     | Securely stores the deployable Docker image.                          |
+| CI/CD              | GitHub Actions                     | Automates the build, test, and deployment process upon code changes. |
+| Hosting            | Azure Web Service                  | Provides serverless hosting with automatic scaling to handle varying traffic. |
 
-## Deploy the docker container from ACR to Azure Web App Service
-1. First check actual registry name
-    1. az acr list --output table
+This automated pipeline ensures that the prediction service is reliable, scalable during peak demand, and easy to update.
 
+# 💡 Future Work & Optimization
+While the Simple RNN is successful, it is currently a strong prototype. The next major phase is crucial:
 
-**Docker Imag, version and Tag**
-1. Building docker image <Image Name>=bikerent
-    1. docker build -t <image/base name>:latest .
-    2. Tag Image with Correct Login Server: 
-        1. Get the login server from *Azure Access Keys*: bikerent-edfgadexcec7gufg.azurecr.io
-        2. az acr login --name <Image Name>: gives Login Succeeded message
-        3. docker tag <Image Name>:latest 
-        4. Format and use in below code: <Login Server>/<Image Name>:latest
-        5. Finally: *docker tag bikerent:latest bikerent-edfgadexcec7gufg.azurecr.io/bikerent:latest*
-    3. If required: az login (before push docker into ACR)
-    
+1. Hyperparameter Tuning: We will conduct rigorous, automated tuning of the model's parameters (e.g., number of neurons, learning rate, input sequence length). We anticipate this will significantly increase the model's accuracy and performance.
+2. Continuous Monitoring: Implementing a system to constantly monitor the model’s real-world accuracy and trigger alerts if prediction quality begins to degrade (model drift).
 
-
-**Steps taken to build**
-1. Create the Container registry in Azure Cloud.
-    1. open Container registry
-    2. give name of the group and other details
-    3. create and review
-    4. click on go to resources
-    5. click on setting for Access Key
-    6. copy *Login server*: bikerentforecast.azurecr.io
-    7. checked the Admin box and copy the password provided by Azure.
-
-2. *Web app for container*
-    1. Give the same Resource Group name i created in container registry and all details
-    2. For practice purpose choose free version and Click on next deployment and next docker container
-    3. Container setups: single container, Azure container registry because i am going to push my image    here.
-    4. Before the next in Azure cloud, quickly build the docker image in the machine.
-    5. Once image pushed in the Azure cloud the web app is live 
-3. *Continous Deployment/Integretion*
-    1. As web app deploy in the Azure cloud then click on "Go to Resources"
-    2. Go to Deployment -> Deployment Centre.
-    3. click on Continous option
-    4. click on "Github action: build and deploy manage your container app automatically with github action" and authorize linked github repo where Azure automatically create a yml file for github action.
-    5. Save that file in Azure.
-    6. Wait for fully deploy through github then go to azure depolyment centre overview to get my app link/url.
-
-
-
-
-**Docker Login**
-1. docker login
-2. docker run hello-world (just for test whether docker is running or not)
-
-**Commands to run on Terminal**
-1. Build Docker image
-    1. *docker build -t bikerentforecast.azurecr.io/bikeapp:latest .* 
-
-2. Docker loging into Azure container registry url(bikerentforecast.azurecr.io) where i am going to push my image
-    1. *docker login bikerentforecast.azurecr.io*
-    2. Enter username: bikerentforecast
-    3. Azure Password: EG+AN2pj8fhTNTz6D5krv4l
-
-3. Docker push: after loging in azure registry requires to push that image in the Azure Container.
-    1. *docker push bikerentforecast.azurecr.io/bikeapp:latest*
-
-## Challenge in creating docker image 
-1. Don't include libraries like random, os, pickle etc. in requirements.txt file.
-2. In dockerfile include RUN pip install --upgrade pip 
-
-## Azure web app challenge
-1. Location region: west europe 
-2. Free version to Basic
-
-## Solve Github merge issue
-1. git pull origin main --no-rebase
-2. git push origin main
-
-## Automatic 
-- pip install pandas numpy matplotlib scikit-learn tensorflow
-## Github issue
-## Stop running docker
-- Check how many docker container running : *docker ps*
-- To stop all running container : *docker stop $(docker ps -q)*
-- To stop just specific running docker : *docker stop <name specific container>*
-- Running image to test: docker run -p 8000:8000 bikerental
-
-## html localhost issue fixed
-- while changing the port 8000 to 8080 throws me error although the url was working but not able to fetch the model prediction it was due to static hardcoded port on the index.html file and change <const API_URL = 'http://localhost:8000';> to <const API_URL = 'http://localhost:8080'>;
-
-
+# 💻 Project Structure
+The repository is organized into two main parts:| File/Folder                | Description                                                                                                                        |
+|---------------------------|------------------------------------------------------------------------------------------------------------------------------------|
+| Bike_Rental_EDA.ipynb     | Exploratory Data Analysis (EDA): Initial data cleaning, description, visualization (charts, plots), and data quality verification. |
+| Bike_Rental_DLmodel.ipynb | Deep Learning Modeling: Data preparation for sequential inputs, model building (RNN, LSTM, GRU), training, evaluation, and saving the final model. |
+| bike-count-forecast/                  | Deployment Code: Contains the FastAPI application (`main.py`), Dockerfile, and the saved model/preprocessor files for serving the API. |
+| notebook/                     | Original and preprocessed dataset files (e.g., `SeoulBikeData.csv`).                                                              |
