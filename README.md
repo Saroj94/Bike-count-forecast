@@ -1,4 +1,6 @@
 # 🚲 Seoul Bike Demand Forecast: A Deep Learning Solution
+## Access the Web App
+🎯**Bike Count Forecasting App**: https://bikeforecastweb-fegxghhwbga2hghz.westeurope-01.azurewebsites.net/
 ## Project Overview
 This project delivers a robust, real-time forecasting model to predict the hourly demand for rental bikes in Seoul, South Korea. The goal is to move bike-sharing operations from reactive to proactive logistics, ensuring bikes are always where riders need them.By accurately predicting hourly demand, city operators can:
 1. **Reduce Costs**: Minimize the time and effort spent manually re-distributing bikes.
