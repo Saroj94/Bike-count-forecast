@@ -27,3 +27,23 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 ! [rejected]        main -> main (non-fast-forward)
 1. git pull origin main --rebase
 2. git push origin main
+
+## Error
+- sarojs-MacBook-Air:Bike-count-forecast sarojrai$ git pull 
+error: Pulling is not possible because you have unmerged files.
+hint: Fix them up in the work tree, and then use 'git add/rm <file>'
+hint: as appropriate to mark resolution and make a commit.
+fatal: Exiting because of an unresolved conflict.
+
+# 1. Resolve the conflict by confirming the deletion
+git rm notebook/Bike_Rental_EDA.ipynb
+
+# 2. Continue the rebase process
+git rebase --continue
+
+# 3. Once the rebase is complete and you are back on the main branch,
+#    you can check the status and then force push (if the rebase rewrote history)
+#    *Only use --force if you know your rebase rewrote history and you are on a branch
+#    only you are working on.*
+# git status 
+# git push origin main --force
